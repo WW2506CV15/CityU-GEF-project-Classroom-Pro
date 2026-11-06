@@ -49,12 +49,11 @@ ClassroomPro/
 ├── .env                 # Environment variables (API keys)
 ├── .gitignore           # Git ignore configuration
 │
-├── vision_engine.py     # Computer vision and facial landmark analysis
+├── compvision.py        # Computer vision and facial landmark analysis
 ├── advisor.py           # Session data aggregation and Groq AI integration
-├── app.py               # Main Streamlit dashboard
-│
-├── test_vision.py       # Standalone vision pipeline verification
-└── test_advisor.py      # AI advisory engine verification
+├── dashboard.py         # Main Streamlit dashboard
+├── tracker.py           # Core tracking logic / execution
+└── setup.py             # Project configuration / setup
 ```
 
 ## Technologies Used
@@ -130,7 +129,7 @@ Make sure `.env` is included in `.gitignore` to prevent accidentally exposing yo
 Start the Streamlit dashboard:
 
 ```bash
-streamlit run app.py
+streamlit run dashboard.py
 ```
 
 The application will be available at:
@@ -155,7 +154,7 @@ ClassroomPro includes two standalone verification scripts.
 **1. Test the Computer Vision Engine**
 
 ```bash
-python test_vision.py
+python tracker.py
 ```
 
 Verifies:
