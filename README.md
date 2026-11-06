@@ -1,124 +1,208 @@
 # CityU-GEF-project-Classroom-Pro
+# ClassroomPro
+
+**An AI-powered classroom engagement monitoring and teaching advisory system.**
+
+ClassroomPro is a computer vision-based application designed to help educators gain insights into classroom engagement through real-time facial landmark analysis.
+
+Using **OpenCV** and **MediaPipe**, the system extracts facial landmarks from webcam frames to estimate head orientation and eye activity. These measurements are used to calculate engagement indicators, which are presented through an interactive **Streamlit dashboard**.
+
+Additionally, ClassroomPro integrates **Groq's LLM API** to analyse aggregated session statistics and generate actionable teaching recommendations.
+
+## Key Features
+
+- **Real-time Face Detection:** Detects up to 10 faces in a webcam frame using MediaPipe Face Mesh.
+- **Head Pose Estimation:** Estimates yaw, pitch and roll to analyse head orientation.
+- **Eye Aspect Ratio (EAR):** Measures eye openness as an indicator of potential drowsiness.
+- **Engagement Classification:** Uses configurable thresholds to classify detected faces as engaged or not engaged.
+- **Interactive Dashboard:** Displays live engagement metrics and session summaries through Streamlit.
+- **AI Teaching Advisory:** Integrates Groq's LLM API to analyse aggregated session data and suggest pedagogical adjustments.
+- **Privacy-conscious Processing:** Processes webcam frames in memory without saving raw images to disk.
+
+## System Architecture
+
+The application consists of three main components:
+
+1. **Computer Vision Engine (`vision_engine.py`)**
+   - Captures and processes facial landmarks.
+   - Estimates head pose using OpenCV's `solvePnP`.
+   - Calculates Eye Aspect Ratio (EAR).
+   - Determines engagement indicators using predefined thresholds.
+
+2. **AI Advisory Engine (`advisor.py`)**
+   - Aggregates engagement statistics across session snapshots.
+   - Constructs a structured prompt containing numerical data.
+   - Communicates with Groq's LLM API.
+   - Generates concise and actionable teaching recommendations.
+
+3. **Web Dashboard (`app.py`)**
+   - Provides an interactive Streamlit interface.
+   - Controls webcam sessions.
+   - Displays live metrics and engagement summaries.
+   - Presents AI-generated teaching recommendations.
+
+## Project Structure
+
+```text
 ClassroomPro/
-├── .env                  # Environment file containing secret keys (GROQ_API_KEY)
-├── .gitignore            # Git ignore configuration
-├── vision_engine.py      # Core computer vision pipeline (MediaPipe, pose & EAR)
-├── advisor.py            # History aggregation and Groq LLM advisory client
-├── app.py                # Main Streamlit web dashboard application
-├── test_vision.py        # Standalone verification script for webcam metrics
-└── test_advisor.py       # Standalone verification script for AI suggestions
-```[cite: 1]
+│
+├── .env                 # Environment variables (API keys)
+├── .gitignore           # Git ignore configuration
+│
+├── vision_engine.py     # Computer vision and facial landmark analysis
+├── advisor.py           # Session data aggregation and Groq AI integration
+├── app.py               # Main Streamlit dashboard
+│
+├── test_vision.py       # Standalone vision pipeline verification
+└── test_advisor.py      # AI advisory engine verification
+```
 
----
+## Technologies Used
 
-## Prerequisites & Requirements
+| Technology | Purpose |
+|---|---|
+| Python | Core programming language |
+| OpenCV | Image processing and head pose estimation |
+| MediaPipe | Facial landmark detection |
+| NumPy | Numerical computations |
+| Streamlit | Interactive web dashboard |
+| Groq API | LLM-powered teaching recommendations |
+| python-dotenv | Environment variable management |
+| streamlit-autorefresh | Automatic dashboard refreshing |
 
-* **Python**: Version 3.11 or 3.12[cite: 1].
-* **Required Packages**:
-  * `opencv-python`[cite: 1]
-  * `mediapipe`[cite: 1]
-  * `numpy`[cite: 1]
-  * `streamlit`[cite: 1]
-  * `groq`[cite: 1]
-  * `python-dotenv`[cite: 1]
-  * `streamlit-autorefresh`[cite: 1]
+## Installation and Setup
 
----
+### 1. Prerequisites
 
-### 1. Create Project Directory & Virtual Environment
+- Python 3.11 or 3.12
+- A working webcam
+- A Groq API key (for AI advisory functionality)
 
-* **Windows (Command Prompt / CMD)**[cite: 1]:
-  ```cmd
-  mkdir ClassroomPro
-  cd ClassroomPro
-  python -m venv .venv
-  .venv\Scripts\activate.bat
-  ```[cite: 1]
+### 2. Clone the repository
 
-* **Windows (PowerShell)**[cite: 1]:
-  ```powershell
-  python -m venv .venv
-  .\.venv\Scripts\Activate.ps1
-  ```[cite: 1]
+```bash
+git clone <YOUR_REPOSITORY_URL>
+cd ClassroomPro
+```
 
-* **macOS / Linux**[cite: 1]:
-  ```bash
-  python3 -m venv .venv
-  source .venv/bin/activate
-  ```[cite: 1]
+### 3. Create a virtual environment
 
-### 2. Install Dependencies
+```bash
+python -m venv .venv
+```
 
+Activate it:
+
+**Windows (Command Prompt):**
 ```cmd
+.venv\Scripts\activate.bat
+```
+
+**Windows (PowerShell):**
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+**macOS / Linux:**
+```bash
+source .venv/bin/activate
+```
+
+### 4. Install dependencies
+
+```bash
 pip install --upgrade pip
 pip install opencv-python mediapipe numpy streamlit groq python-dotenv streamlit-autorefresh
-```[cite: 1]
+```
 
-### 3. Environment Variables Configuration
+### 5. Configure environment variables
 
-Create a file named `.env` in the root folder[cite: 1]:
+Create a `.env` file in the project root directory:
+
 ```env
-GROQ_API_KEY=gsk_your_actual_groq_api_key_here
-```[cite: 1]
+GROQ_API_KEY=your_groq_api_key_here
+```
 
-Create a `.gitignore` file to keep secrets out of version control[cite: 1]:
-```text
-.venv/
-.env
-__pycache__/
-*.pyc
-.DS_Store
-```[cite: 1]
-
----
+Make sure `.env` is included in `.gitignore` to prevent accidentally exposing your API key.
 
 ## Running the Application
 
-### 1. Test Component Engines Standalone
+Start the Streamlit dashboard:
 
-Verify vision engine frame extraction[cite: 1]:
-```cmd
-python test_vision.py
-```[cite: 1]
-
-Verify AI teaching advice generation[cite: 1]:
-```cmd
-python test_advisor.py
-```[cite: 1]
-
-### 2. Launch the Streamlit Dashboard
-
-Start the live web UI[cite: 1]:
-```cmd
+```bash
 streamlit run app.py
-```[cite: 1]
+```
 
-1. Access the web interface at `http://localhost:8501`[cite: 1].
-2. Click **▶Start Session** to initiate automatic frame analysis every 5 seconds[cite: 1].
-3. View real-time engagement statuses (Engaged vs. Not Engaged) and Eye Aspect Ratio metrics per student[cite: 1].
-4. Click **⏸Stop Session** to freeze session history and display aggregate statistics[cite: 1].
-5. Click **Generate AI Teaching Advice** to request pedagogical insights based on session metrics[cite: 1].
+The application will be available at:
+
+```text
+http://localhost:8501
+```
+
+### Basic Workflow
+
+1. Launch the dashboard.
+2. Click **Start Session** to begin webcam-based analysis.
+3. Allow the application to process classroom snapshots.
+4. Monitor the engagement metrics displayed on the dashboard.
+5. Click **Stop Session** to view the session summary.
+6. Select **Generate AI Teaching Advice** to obtain recommendations based on the collected statistics.
+
+## Testing
+
+ClassroomPro includes two standalone verification scripts.
+
+**1. Test the Computer Vision Engine**
+
+```bash
+python test_vision.py
+```
+
+Verifies:
+- Webcam accessibility.
+- Facial landmark detection.
+- Head pose estimation.
+- Eye Aspect Ratio calculations.
+- Engagement classification.
+
+**2. Test the AI Advisory Engine**
+
+```bash
+python test_advisor.py
+```
+
+Uses fabricated session data to verify:
+- Engagement statistics aggregation.
+- Groq API communication.
+- AI-generated teaching recommendations.
+
+A valid `GROQ_API_KEY` is required for the AI advisory test.
+
+## Privacy and Limitations
+
+ClassroomPro is designed with privacy-conscious data processing in mind.
+
+- Raw webcam frames are processed in memory and are not saved to disk.
+- Only numerical measurements and session statistics are retained during the application session.
+- Aggregated numerical statistics are sent to the Groq API when generating teaching recommendations.
+
+**Important limitations:**
+
+- Engagement classification is based on observable facial indicators, not direct measurements of attention, understanding or cognitive engagement.
+- Head orientation and eye openness are imperfect proxies and may produce inaccurate classifications.
+- Detection performance can vary with lighting, camera positioning and individual differences.
+- The system should be used as an educational support tool rather than a definitive assessment of individual students.
+
+Appropriate consent, transparency and safeguards should be established before using the system in an actual classroom.
+
+## Future Improvements
+
+Potential areas for further development include:
+
+- Individual calibration of facial measurement thresholds.
+- More robust temporal analysis of engagement indicators.
+- Improved tracking consistency across consecutive snapshots.
+- Expanded session analytics and visualisation.
+- Further evaluation of classification accuracy under different classroom conditions.
 
 ---
-
-## Calibration Thresholds
-
-Threshold parameters in `vision_engine.py` can be adjusted based on classroom environment and webcam placement[cite: 1]:
-
-| Parameter | Default Value | Description |
-|---|---|---|
-| `YAW_THRESHOLD` | `0.5` rad (~28°) | Triggers "Not engaged" when student turns head left or right[cite: 1]. |
-| `PITCH_THRESHOLD` | `0.6` rad (~34°) | Triggers "Not engaged" when student looks down (e.g., at a phone)[cite: 1]. |
-| `EAR_THRESHOLD` | `0.18` | Values below `0.18` indicate closed eyes or drowsiness[cite: 1]. |
-
----
-
-## 🔧 Troubleshooting Guide
-
-| Issue | Cause | Resolution |
-|---|---|---|
-| `'source' is not recognized` | Running Linux syntax on Windows CMD | Use `.venv\Scripts\activate.bat`[cite: 1]. |
-| `No module named 'mediapipe'` | Virtual environment not active | Ensure `(.venv)` prompt is active before running commands[cite: 1]. |
-| `cv2.VideoCapture(0)` error | Camera in use or wrong index | Close other webcam apps or test camera indices `1` or `2`[cite: 1]. |
-| `GROQ_API_KEY is not set` | `.env` missing or in wrong path | Place `.env` in the root folder alongside `advisor.py`[cite: 1]. |
-| Groq API `403 Forbidden` | Geographic access restriction | Connect via a US/EU VPN server[cite: 1]. |
