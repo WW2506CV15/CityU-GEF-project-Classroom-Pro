@@ -23,7 +23,7 @@ Additionally, ClassroomPro integrates **Groq's LLM API** to analyse aggregated s
 
 The application consists of three main components:
 
-1. **Computer Vision Engine (`vision_engine.py`)**
+1. **Computer Vision Engine (`compvision.py`)**
    - Captures and processes facial landmarks.
    - Estimates head pose using OpenCV's `solvePnP`.
    - Calculates Eye Aspect Ratio (EAR).
@@ -35,7 +35,7 @@ The application consists of three main components:
    - Communicates with Groq's LLM API.
    - Generates concise and actionable teaching recommendations.
 
-3. **Web Dashboard (`app.py`)**
+3. **Web Dashboard (`dashboard.py`)**
    - Provides an interactive Streamlit interface.
    - Controls webcam sessions.
    - Displays live metrics and engagement summaries.
